@@ -1,4 +1,4 @@
-# ECE-464-Project-2
-# ARSALAN BABAR 
-# NEIL PATEL
-# KEVIN CALVA
+# ECE464Project1
+
+# Szymon - Arsalan - Lucia
+
