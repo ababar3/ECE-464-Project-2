@@ -1,0 +1,29 @@
+#Circuit.bench
+
+# INPUTS:
+INPUT(X0)
+INPUT(X1)
+INPUT(X2)
+INPUT(X3)
+INPUT(S0)
+INPUT(S1)
+
+
+# OUTPUTS:
+OUTPUT(M)
+
+
+# GATES:
+A = NOT(S0)
+B = NOT(S1)
+C = AND(B,A,X0)
+D = AND(S1,A,X1)
+E = AND(B,S0,X2)
+F = AND(S1,S0,X3)
+M = OR(C,D,E,F)
+
+
+
+
+
+
