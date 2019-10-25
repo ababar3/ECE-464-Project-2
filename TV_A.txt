@@ -1,1 +1,3 @@
 # TV SET A 
+Initial Seed: 10000000
+
