@@ -60,6 +60,7 @@ def TV_A(circuitName, seedInitial):
         x=str1+sum
         if len(x)>n:
             x =x[1:]
+            x=x.replace('1', '0')
         outputFile.write(x+"\n")
         seedInitial=sum
         x=""
@@ -73,15 +74,13 @@ def TV_A(circuitName, seedInitial):
                  #   outputName = os.path.join(script_dir, userInput)
                  #   break
 
-
-
-
-
 def TV_B(circuitName, seedInitial):
     lst = []
+    gnd=[]
     sum = ""
     x = ""
     str1 = ""
+    nxt=""
     netFile = open(circuitName, 'r')  # open the circuit bench and read that file
 
     # while True:
@@ -107,24 +106,37 @@ def TV_B(circuitName, seedInitial):
         lst.append(seedInitial)
         i=i+1
     str1 = str1.join(lst)
+    str1=str1[loopTime-n:n]
+    str1= ''.join(reversed(str1))
 
-    outputFile.write(str1)
-    exit()
+
+    outputFile.write(str1+"\n")
+
     # sum - decimal value 18
     # binary value 10010
     i = 0
     while i < 255:
-        num1 = seedInitial
-        num2 = '0001'
-        sum = bin(int(num1, 2) + int(num2, 2))
-        sum = sum.replace('0b', '')
+        g=0
+        while g<loopTime:
+            num1 = str1
+            num2 = '0001'
+            sum = bin(int(num1, 2) + int(num2, 2))
+            sum = sum.replace('0b', '')
+            gnd.append(sum)
+            seedInitial=sum
+            g=g+1
+        nxt= nxt.join(gnd)
+        outputFile.write(nxt+"\n")
+        nxt=""
+        gnd.clear()
+        #seedInitial=sum
         # if len(sum)==9:
         # x=str1[1:]
-        x = str1 + sum
-        if len(x) > n:
-            x = x[1:]
-        outputFile.write(x + "\n")
-        seedInitial = sum
+        #x = str1 + sum
+        #if len(x) > n:
+          #  x = x[1:]
+        #outputFile.write(x + "\n")
+        #seedInitial = sum
         x = ""
         i = i + 1
 
@@ -369,8 +381,8 @@ def main():
 
     #TV_A(cktFile, seedInitial)
     TV_B(cktFile, seedInitial)
-    TV_C(cktFile, seedInitial)
-    TV_D(cktFile, seedInitial)
+    #TV_C(cktFile, seedInitial)
+    #TV_D(cktFile, seedInitial)
     #TV_E(cktFile, seedInitial)
 
 if __name__ == "__main__":
