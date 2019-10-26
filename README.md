@@ -1,1 +1,4 @@
-# ECE-464-Project-2
+# ECE464Project1
+
+# Szymon - Arsalan - Lucia
+
