@@ -454,6 +454,7 @@ def TVgenD(seed, fileTV_D, numInputs):
 
         if i > 0:
             temp = LSFR(str(temp))
+
         temp = str(format(int(temp), "08"))
         num = temp
         while len(temp) < int(numInputs):
@@ -463,19 +464,30 @@ def TVgenD(seed, fileTV_D, numInputs):
 
 
 def TVgenE(seed, fileTV_E, numInputs):
+    nextStart = 0
     for i in range(0, 255):
         tv = ""
-        temp = bin(int(seed) + i)
-        temp = temp[2:]
-        nextInp = temp
-        while len(tv) < int(numInputs):
-            temp = bin(int(seed) + i)
+        if i == 0:
+            temp = bin(int(seed))
             temp = temp[2:]
-            temp = LSFR(str(nextInp))
-            temp = format(int(temp), "08")
             nextInp = temp
-            tv = temp + tv
+        if i > 0:
+            nextInp = nextStart
+            i = 0
+        while len(tv) < int(numInputs):
+            if i > 0:
+                temp = LSFR(str(nextInp))
+                temp = format(int(temp), "08")
 
+            else:
+                i += 1
+                temp = format(int(nextInp), "08")
+
+            nextInp = temp
+
+            if len(tv) == 8:
+                nextStart = temp
+            tv = temp + tv
 
         fileTV_E.write(tv[len(tv) - numInputs: len(tv)] + "\n")
 
