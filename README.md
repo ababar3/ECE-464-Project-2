@@ -1,4 +1,4 @@
-# ECE464Project1
+# ECE464Project2
 
-# Szymon - Arsalan - Lucia
+# Arsalan, KEVIN, NEIL
 
