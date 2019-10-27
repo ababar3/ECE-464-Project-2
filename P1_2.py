@@ -2,6 +2,9 @@ from __future__ import print_function
 import os
 import copy
 # FUNCTION: Neatly prints the Circuit Dictionary:
+def percentageGen(z):
+    z=z+1
+    return z
 def printCkt(circuit):
     print("INPUT LIST:")
     for x in circuit["INPUTS"][1]:
@@ -556,7 +559,7 @@ def bad_sim(circuit,fault):
 def main():
     script_dir = os.path.dirname(__file__)  # <-- absolute dir the script is in
     while True:
-        cktFile = "circuit.bench"
+        cktFile = "c432.bench"
         print("\n Read circuit benchmark file: use " + cktFile + "?" + " Enter to accept or type filename: ")
         userInput = input()
         if userInput == "":
@@ -574,23 +577,30 @@ def main():
     print(circuit)
 
     NewCircuit = copy.deepcopy(circuit) #circuit dictionary is given a new variable NewCircuit
+    print("\n Enter the batch size:")
+    batchInput= input()
+    b=int(batchInput)
+    #while True:
+        #inputName= ""
+        #for i in input:
+        #inputName = "TV_A.txt" #for test vector
+        #for faults to be tested
 
-    while True:
-        inputName = "input.txt" #for test vector
-        FaultName = "f_list.txt" #for faults to be tested
-        print("\n Read input vector file: use " + inputName + "?" + " Enter to accept or type filename: ")
-        userInput = input()
+            #for
 
-        if userInput == "": #if user hits enter input.txt file would be read else it would take input of filename
-            break
-        else:
-            inputName = os.path.join(script_dir, userInput)
-            if not os.path.isfile(inputName):
-                print("File does not exist. \n")
-                return
-            else:
-                break
+        #print("\n Read input vector file: use " + inputName + "?" + " Enter to accept or type filename: ")
+        #userInput = input()
 
+        #if userInput == "": #if user hits enter input.txt file would be read else it would take input of filename
+         #   break
+       # else:
+         #   inputName = os.path.join(script_dir, userInput)
+          #  if not os.path.isfile(inputName):
+           #    print("File does not exist. \n")
+           #    return
+            #else:
+             #   break
+    FaultName = "f_list.txt"
     print("\n Do you want to use the full fault list? Enter to accept, type no to select your fault list:")
     userInput = input()
     if userInput == "":
@@ -620,6 +630,7 @@ def main():
         # Select output file, default is output.txt
     while True:
         outputName = "output.txt" #output file
+        percentageM= "percentage.txt"
         print("\n Write output file: use " + outputName + "?" + " Enter to accept or type filename: ")
         userInput = input()
         if userInput == "":
@@ -627,130 +638,160 @@ def main():
         else:
             outputName = os.path.join(script_dir, userInput) #takes the name of file user wants to input
             break
+    lst = ["TV_A.txt", "TV_B.txt", "TV_C.txt", "TV_D.txt", "TV_E.txt"]
+    z=0
+    percentageFile = open(percentageM, "w")
 
-    inputFile = open(inputName,"r") #each input and output is initialized after being finally read dynamically
-    inputFault = open(FaultName,"r")
-    outputFile = open(outputName,"w")
 
-    faultList = [] #List created for all faults
+    while(z<len(lst)):
+        percentageFile.write("\nPERCENTAGE GENERATION FOR: " + lst[z] + "\n")
 
-    undetected = [] #List createed for undetected faults
+        inputName=lst[z]
+        inputFile = open(inputName,"r") #each input and output is initialized after being finally read dynamically
+        inputFault = open(FaultName,"r")
+        outputFile = open(outputName,"w")
 
-    fault = [] #List created for faults that are detected.
+        faultList = [] #List created for all faults
 
-    good_output = []
-    i = 0
-    outputFile.write("#fault sim result\n")
-    outputFile.write("#input: circuit\n")
-    outputFile.write("#input: " + inputName + "\n") # Headers for output files
-    outputFile.write("#input: " + FaultName + "\n")
-    outputFile.write("\n")
+        undetected = [] #List createed for undetected faults
 
-    faultList = inputFault.readlines() # Each fault is read and stored in list
-    faultList = [x.strip() for x in faultList] # To get the leading and trailing characters eg: A-SA-0 it return 'A' '0'
+        fault = [] #List created for faults that are detected.
 
-    print("Simulation begins")
-    for line in inputFile:  #for each test vector in the tv input file "The outer For Loop"
-        output = ""
-        if (line == "\n"):
-            continue
-        if (line[0] == "#"):
-            continue
+        good_output = []
+        i = 0
+        outputFile.write("#fault sim result\n")
+        outputFile.write("#input: circuit\n")
+        outputFile.write("#input: " + lst[z] + "\n") # Headers for output files
+        outputFile.write("#input: " + FaultName + "\n")
+        outputFile.write("\n")
 
-        line = line.replace("\n", "")
+        faultList = inputFault.readlines() # Each fault is read and stored in list
+        faultList = [x.strip() for x in faultList] # To get the leading and trailing characters eg: A-SA-0 it return 'A' '0'
 
-        j = 0
-        bad_output = []
-
-        circuit = inputRead(circuit,line) #reads the circuit
-        circuit = good_sim(circuit) #circuit runs through the good simulator
-        RequiredFault = []
-        for y in circuit["OUTPUTS"][1]: #Checking the outputs of goods simulator
-            if not circuit[y][2]:
-                output[i] = "NETLIST ERROR: OUTPUT LINE \"" + y + "\" NOT ACCESSED"
+        print("Simulation begins")
+        batch=0
+        tvCount=0
+        c=int(b*25)
+        for line in inputFile: #for each test vector in the tv input file "The outer For Loop"
+            if tvCount==c:
                 break
-            output = str(circuit[y][3]) + output #output is stored in variable output
-        good_output.append(output) #output gets appended to good_output list here.
-        print("Output of the good circuit:" + good_output[i] + "\n")
-        outputFile.write("\ntv%d = %s ->  %s \n" %(i+1, line, good_output[i])) #for comparing later, printing the good simulator outputs
-        outputFile.write("detected:\n")
-
-
-        iteration = 0
-
-        while iteration < len(faultList): #iterating the loop until the length of lines in faultList text file
-            aux_output = ""
-            circuit = inputRead(circuit, line) #the circuit is read here
-            if (faultList[iteration] == ""): #if fault line is empty continue to next line
-                iteration += 1
+            output = ""
+            if (line == "\n"):
                 continue
-            if "#" in faultList[iteration]: #if fault line has a comment continue to next line
-                iteration += 1
+            if (line[0] == "#"):
                 continue
 
-            if "-SA-" in faultList[iteration]: #checks if "-SA- is in faultlist line
-                RequiredFault.append(faultList[iteration]) #stores that faultList line in a list called Required Fault
-                fault = FaultReader(faultList[iteration]) #Reads the fault and returns the neccessary characters needed for fault
-                print("This is the simulation with the fault #: %d" %(j+1))
-                print(fault)
-                iteration += 1
-                j += 1
-            else:
-                print("Error in file format, line that is no comment and no fault.")
-                return -1
+            line = line.replace("\n", "")
 
-            circuit = Fault_Input(circuit,fault) # new line is read by the circuit which has the updated fault list
-            circuit = bad_sim(circuit, fault) #fault line ran by bad simulator
+            j = 0
+            bad_output = []
 
-            for y in circuit["OUTPUTS"][1]: #checks the outputs of cricuit with faults
+            circuit = inputRead(circuit,line) #reads the circuit
+            batch=batch+1
+            tvCount=tvCount+1
+
+            circuit = good_sim(circuit) #circuit runs through the good simulator
+            RequiredFault = []
+
+            for y in circuit["OUTPUTS"][1]: #Checking the outputs of goods simulator
                 if not circuit[y][2]:
-                    output = "NETLIST ERROR: OUTPUT LINE \"" + y + "\" NOT ACCESSED"
+                    output[i] = "NETLIST ERROR: OUTPUT LINE \"" + y + "\" NOT ACCESSED"
                     break
-                aux_output = str(circuit[y][3]) + aux_output
-
-            bad_output.append(aux_output) #this output gets stored in bad_ouput list
-
-            if (bad_output[j-1] == good_output[i]): #compares bad and good output and if they are same it mean it was undetected
-                if i<1:
-                    undetected.append(RequiredFault[j-1]) # add fault to undetected list
-            else:
-                if RequiredFault[j-1] in undetected:
-                    undetected.remove(RequiredFault[j-1]) # remove undetected if not equals
-
-            circuit = copy.deepcopy(NewCircuit) # used deepcopy to copy NewCircuit back to circuit
+                output = str(circuit[y][3]) + output #output is stored in variable output
+            good_output.append(output) #output gets appended to good_output list here.
+            print("Output of the good circuit:" + good_output[i] + "\n")
+            outputFile.write("\ntv%d = %s ->  %s \n" %(i+1, line, good_output[i])) #for comparing later, printing the good simulator outputs
+            outputFile.write("detected:\n")
 
 
+            iteration = 0
 
-        #print(RequiredFault)
-        #print(bad_output)
-        #print(good_output)
+            while iteration < len(faultList): #iterating the loop until the length of lines in faultList text file
+                aux_output = ""
+                circuit = inputRead(circuit, line) #the circuit is read here
+                if (faultList[iteration] == ""): #if fault line is empty continue to next line
+                    iteration += 1
+                    continue
+                if "#" in faultList[iteration]: #if fault line has a comment continue to next line
+                    iteration += 1
+                    continue
 
-        while (i < len(good_output)):
-            k = j
-
-            while (k>0):
-
-                if (bad_output[j-k-1] != good_output[i]):
-                    outputFile.write("%s: %s -> %s\n" %(RequiredFault[j-k-1],line, bad_output[j-k-1]))
-                    k -= 1
+                if "-SA-" in faultList[iteration]: #checks if "-SA- is in faultlist line
+                    RequiredFault.append(faultList[iteration]) #stores that faultList line in a list called Required Fault
+                    fault = FaultReader(faultList[iteration]) #Reads the fault and returns the neccessary characters needed for fault
+                    print("This is the simulation with the fault #: %d" %(j+1))
+                    print(fault)
+                    iteration += 1
+                    j += 1
                 else:
-                    k -= 1
-            i += 1
+                    print("Error in file format, line that is no comment and no fault.")
+                    return -1
+
+                circuit = Fault_Input(circuit,fault) # new line is read by the circuit which has the updated fault list
+                circuit = bad_sim(circuit, fault) #fault line ran by bad simulator
+
+                for y in circuit["OUTPUTS"][1]: #checks the outputs of cricuit with faults
+                    if not circuit[y][2]:
+                        output = "NETLIST ERROR: OUTPUT LINE \"" + y + "\" NOT ACCESSED"
+                        break
+                    aux_output = str(circuit[y][3]) + aux_output
+
+                bad_output.append(aux_output) #this output gets stored in bad_ouput list
+
+                if (bad_output[j-1] == good_output[i]): #compares bad and good output and if they are same it mean it was undetected
+                    if i<1:
+                        undetected.append(RequiredFault[j-1]) # add fault to undetected list
+                else:
+                    if RequiredFault[j-1] in undetected:
+                        undetected.remove(RequiredFault[j-1]) # remove undetected if not equals
+
+                circuit = copy.deepcopy(NewCircuit) # used deepcopy to copy NewCircuit back to circuit
 
 
-    print(undetected) #prints undetected list
+            #print(RequiredFault)
+            #print(bad_output)
+            #print(good_output)
 
-    unFaults = len(undetected)
-    detected = j-unFaults #to calculate the number detected we subtract total - undetected
-    outputFile.write("\nTotal detected faults: %d\n" %detected)
-    outputFile.write("\nundetected faults: %d\n" %unFaults)
-    for x in undetected:
-        outputFile.write(x + "\n")
+            while (i < len(good_output)):
+                k = j
 
-    percentage = detected/j*100 #calculates percentage
-    outputFile.write("\nfault coverage: %d/%d = %d" %(detected, j, percentage))
-    outputFile.write('%')
-    outputFile.close()
+                while (k>0):
 
+                    if (bad_output[j-k-1] != good_output[i]):
+                        outputFile.write("%s: %s -> %s\n" %(RequiredFault[j-k-1],line, bad_output[j-k-1]))
+                        k -= 1
+                    else:
+                        k -= 1
+                i += 1
+            unFaults = len(undetected)
+            detected = j - unFaults
+
+
+            for x in undetected:
+                if batch == b:  # b is input batch number 1-10
+                    percentage = detected / j * 100  # calculates percentage
+                    percentageFile.write("fault coverage: %d/%d = %d" % (detected, j, percentage))
+                    percentageFile.write('%\n')
+                    batch=0
+                    break
+   # percentageFile.close()
+
+        print(undetected) #prints undetected list
+
+        unFaults = len(undetected)
+        detected = j-unFaults #to calculate the number detected we subtract total - undetected
+        outputFile.write("\nTotal detected faults: %d\n" %detected)
+        outputFile.write("\nundetected faults: %d\n" %unFaults)
+
+
+        for x in undetected:
+            outputFile.write(x + "\n")
+
+        percentage = detected/j*100 #calculates percentage
+        outputFile.write("\nfault coverage: %d/%d = %d" %(detected, j, percentage))
+        outputFile.write('%')
+        outputFile.close()
+        z=z+1
+    percentageFile.close()
 if __name__ == "__main__":
     main()

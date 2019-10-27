@@ -1,6 +1,16 @@
 from __future__ import print_function
 import os
 
+
+def getInput(netName):
+
+    netFile=open(netName, 'r')
+    input=0
+    for line in netFile:
+        if line[0:5]=='INPUT':
+            input=input+1
+    return input
+
 def FaultList(netName):
 
     #Open circuit file & read it
@@ -121,6 +131,104 @@ def FaultList(netName):
     faultList.append(line)
     return faultList
 
+def TVgenA(seed, fileTV_A, numInputs):
+    for i in range(0, 255):
+        temp = bin(int(seed) + i)
+        temp = temp[2:]
+        a=len(temp)-numInputs
+        if len(temp)>numInputs:
+            temp=temp[a:]
+        fileTV_A.write(format(int(temp), "0" + str(numInputs)) + "\n")
+
+def TVgenB(seed, fileTV_B, numInputs):
+    for i in range(0, 255):
+        temp = bin(int(seed) + i)
+        temp = temp[2:]
+        temp = format(int(temp), "08")
+        num = temp;
+        while len(temp) < int(numInputs):
+            temp = num + temp
+
+        fileTV_B.write(temp[len(temp) - numInputs: len(temp)] + "\n")
+
+
+def TVgenC(seed, fileTV_C, numInputs):
+    for i in range(0, 255):
+        tv = ""
+        while len(tv) < int(numInputs):
+            temp = bin(int(seed) + i)
+            temp = temp[2:]
+            temp = format(int(temp), "08")
+            tv = temp + tv
+            i += 1
+
+        fileTV_C.write(tv[len(tv) - numInputs: len(tv)] + "\n")
+
+
+def LSFR(inp):
+    inp = list(reversed(inp))
+    inp2 = ['0', '0', '0', '0', '0', '0', '0', '0']
+
+    inp2[0] = inp[7]
+    inp2[1] = inp[0]
+    inp2[2] = int(inp[1]) ^ int(inp[len(inp)-1])
+    inp2[3] = int(inp[2]) ^ int(inp[len(inp)-1])
+    inp2[4] = int(inp[3]) ^ int(inp[len(inp)-1])
+    inp2[5] = inp[4]
+    inp2[6] = inp[5]
+    inp2[7] = inp[6]
+
+    inp2 = list(reversed(inp2))
+
+    return int("".join(map(str, inp2)))
+
+
+def TVgenD(seed, fileTV_D, numInputs):
+    temp = bin(int(seed))
+    temp = temp[2:]
+
+    for i in range(0, 255):
+
+        if i > 0:
+            temp = LSFR(str(temp))
+
+        temp = str(format(int(temp), "08"))
+        num = temp
+        while len(temp) < int(numInputs):
+            temp = num + temp
+
+        fileTV_D.write(temp[len(temp) - numInputs: len(temp)] + "\n")
+
+
+def TVgenE(seed, fileTV_E, numInputs):
+    nextStart = 0
+    for i in range(0, 255):
+        tv = ""
+        if i == 0:
+            temp = bin(int(seed))
+            temp = temp[2:]
+            nextInp = temp
+        if i > 0:
+            nextInp = nextStart
+            i = 0
+        while len(tv) < int(numInputs):
+            if i > 0:
+                temp = LSFR(str(nextInp))
+                temp = format(int(temp), "08")
+
+            else:
+                i += 1
+                temp = format(int(nextInp), "08")
+
+            nextInp = temp
+
+            if len(tv) == 8:
+                nextStart = temp
+            tv = temp + tv
+
+        fileTV_E.write(tv[len(tv) - numInputs: len(tv)] + "\n")
+
+
 def main():
 
     print("Full fault list generator\n")
@@ -128,7 +236,7 @@ def main():
     script_dir = os.path.dirname(__file__)  # <-- absolute dir the script is in
 
     while True:
-        cktFile = "circuit.bench"
+        cktFile = "c432.bench"
         print("\n Read circuit benchmark file: use " + cktFile + "?" + " Enter to accept or type filename: ")
         userInput = input()
         if userInput == "":
@@ -139,6 +247,14 @@ def main():
                 print("File does not exist. \n")
             else:
                 break
+    while True:
+        seed = ""
+        print("\n Enter Seed s0 Value: ")
+        userInput = input()
+        if userInput != "":
+            seed = userInput;
+            break
+
 
     print("Detection possible faults...\n")
 
@@ -161,6 +277,21 @@ def main():
 
     for line in faultList:
         outputFile.write("%s\n" % line)
+
+    file_TV_A = open("TV_A.txt", "w")
+    file_TV_B = open("TV_B.txt", "w")
+    file_TV_C = open("TV_C.txt", "w")
+    file_TV_D = open("TV_D.txt", "w")
+    file_TV_E = open("TV_E.txt", "w")
+
+    numInputs = getInput(cktFile)
+
+
+    TVgenA(seed, file_TV_A, numInputs)
+    TVgenB(seed, file_TV_B, numInputs)
+    TVgenC(seed, file_TV_C, numInputs)
+    TVgenD(seed, file_TV_D, numInputs)
+    TVgenE(seed, file_TV_E, numInputs)
 
     outputFile.close()
 
