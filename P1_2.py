@@ -1,6 +1,7 @@
 from __future__ import print_function
 import os
 import copy
+
 # FUNCTION: Neatly prints the Circuit Dictionary:
 def percentageGen(z):
     z=z+1
@@ -645,7 +646,7 @@ def main():
 
     while(z<len(lst)):
         percentageFile.write("\nPERCENTAGE GENERATION FOR: " + lst[z] + "\n")
-
+        batchSize = []
         inputName=lst[z]
         inputFile = open(inputName,"r") #each input and output is initialized after being finally read dynamically
         inputFault = open(FaultName,"r")
@@ -674,6 +675,7 @@ def main():
         c=int(b*25)
         for line in inputFile: #for each test vector in the tv input file "The outer For Loop"
             if tvCount==c:
+                batchSize.append(tvCount)
                 break
             output = ""
             if (line == "\n"):
@@ -766,14 +768,20 @@ def main():
             unFaults = len(undetected)
             detected = j - unFaults
 
-
-            for x in undetected:
-                if batch == b:  # b is input batch number 1-10
-                    percentage = detected / j * 100  # calculates percentage
-                    percentageFile.write("fault coverage: %d/%d = %d" % (detected, j, percentage))
+            if batch==b:
+                if len(undetected)==0:
+                    percentageFile.write("fault coverage: %d/%d = %d" % (detected, j, percentage,))
                     percentageFile.write('%\n')
                     batch=0
-                    break
+                else:
+                    for x in undetected:
+                        #if batch == b:  # b is input batch number 1-10
+                        percentage = detected / j * 100  # calculates percentage
+                        percentageFile.write("fault coverage: %d/%d = %d" % (detected, j, percentage,))
+                        percentageFile.write('%\n')
+                        batch = 0
+                        break
+
    # percentageFile.close()
 
         print(undetected) #prints undetected list
@@ -793,5 +801,56 @@ def main():
         outputFile.close()
         z=z+1
     percentageFile.close()
+
+    percentageFile = open("percentage.txt", "r")
+    csvFile = open("f_cvg.csv", "w")
+
+    tvA = []
+    tvB = []
+    tvC = []
+    tvD = []
+    tvE = []
+    csvFile.write("TV#,A,B,C,D,E,Batch Size""\n")
+    current = ""
+    for line in percentageFile:
+        if line == "\n" or line == " ":
+            continue
+        if line == "PERCENTAGE GENERATION FOR: TV_A.txt\n":
+            current = "A"
+        elif line == "PERCENTAGE GENERATION FOR: TV_B.txt\n":
+            current = "B"
+        elif line == "PERCENTAGE GENERATION FOR: TV_C.txt\n":
+            current = "C"
+        elif line == "PERCENTAGE GENERATION FOR: TV_D.txt\n":
+            current = "D"
+        elif line == "PERCENTAGE GENERATION FOR: TV_E.txt\n":
+            current = "E"
+
+        line = line.replace("\n", "")
+        line = line.replace(" ", "")
+        if line[len(line) - 1] != "%":
+            continue
+
+        line = line.split("=")
+
+        if current == "A":
+            tvA.append(line[1])
+        elif current == "B":
+            tvB.append(line[1])
+        elif current == "C":
+            tvC.append(line[1])
+        elif current == "D":
+            tvD.append(line[1])
+        elif current == "E":
+            tvE.append(line[1])
+    x=b
+    for i in range(0, len(tvA)):
+        csvFile.write(str(i + 1) + "," + tvA[i] + "," + tvB[i] + "," + tvC[i] + "," + tvD[i] + ","+tvE[i]+"," + str(x) + "\n")
+        x=x+b
+    csvFile.close()
+
+
+
+
 if __name__ == "__main__":
     main()

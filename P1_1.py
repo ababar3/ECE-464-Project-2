@@ -206,12 +206,12 @@ def TVgenE(seed, fileTV_E, numInputs):
         tv = ""
         if i == 0:
             temp = bin(int(seed))
-            temp = temp[2:]
+            temp = temp[2:].zfill(8)
             nextInp = temp
         if i > 0:
             nextInp = nextStart
             i = 0
-        while len(tv) < int(numInputs):
+        while (len(tv) < int(numInputs)):
             if i > 0:
                 temp = LSFR(str(nextInp))
                 temp = format(int(temp), "08")
@@ -225,8 +225,10 @@ def TVgenE(seed, fileTV_E, numInputs):
             if len(tv) == 8:
                 nextStart = temp
             tv = temp + tv
+            print(len(tv))
 
         fileTV_E.write(tv[len(tv) - numInputs: len(tv)] + "\n")
+
 
 
 def main():
