@@ -82,8 +82,8 @@ def netRead(netName):
             circuit[line] = ["INPUT", line, False, 'U']
 
             inputBits += 1
-            print(line)
-            print(circuit[line])
+            #print(line)
+            #print(circuit[line])
             continue
 
         # Read an OUTPUT wire and add to the output array list
@@ -122,8 +122,8 @@ def netRead(netName):
 
         # add the gate output wire to the circuit dictionary with the dest as the key
         circuit[gateOut] = [logic, terms, False, 'U']
-        print(gateOut)
-        print(circuit[gateOut])
+        #print(gateOut)
+        #print(circuit[gateOut])
 
     # now after each wire is built into the circuit dictionary,
     # add a few more non-wire items: input width, input array, output array, gate list
@@ -142,7 +142,6 @@ def netRead(netName):
 
 
     return circuit
-
 
 # -------------------------------------------------------------------------------------------------------------------- #
 # FUNCTION: calculates the output value for each logic gate
@@ -384,10 +383,10 @@ def basic_sim(circuit):
                 print(circuit)
                 return circuit
 
-            print("Progress: updating " + curr + " = " + circuit[curr][3] + " as the output of " + circuit[curr][0] + " for:")
-            for term in circuit[curr][1]:
-                print(term + " = " + circuit[term][3])
-            print("\n")
+            #print("Progress: updating " + curr + " = " + circuit[curr][3] + " as the output of " + circuit[curr][0] + " for:")
+            #for term in circuit[curr][1]:
+            #    print(term + " = " + circuit[term][3])
+            #print("\n")
             #input()
 
         else:
@@ -518,12 +517,12 @@ def main():
 
         print("\n before processing circuit dictionary...")
         # Uncomment the following line, for the neater display of the function and then comment out print(circuit)
-        printCkt(circuit)
+        #printCkt(circuit)
         #print(circuit)
         print("\n ---> Now ready to simulate INPUT = " + line)
         circuit = inputRead(circuit, line)
         # Uncomment the following line, for the neater display of the function and then comment out print(circuit)
-        printCkt(circuit)
+        #printCkt(circuit)
         #print(circuit)
 
         if circuit == -1:
@@ -544,7 +543,7 @@ def main():
         circuit = basic_sim(circuit)
         print("\n *** Finished simulation - resulting circuit: \n")
         # Uncomment the following line, for the neater display of the function and then comment out print(circuit)
-        printCkt(circuit)
+        #printCkt(circuit)
         #print(circuit)
 
         for y in circuit["OUTPUTS"][1]:
@@ -615,7 +614,7 @@ def main():
 
         print("\n circuit after resetting: \n")
         # Uncomment the following line, for the neater display of the function and then comment out print(circuit)
-        printCkt(circuit)
+        #printCkt(circuit)
         #print(circuit)
 
         print("\n*******************\n")

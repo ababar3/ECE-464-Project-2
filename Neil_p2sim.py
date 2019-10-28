@@ -558,18 +558,18 @@ def main():
     file_TV_D.close()
     file_TV_E.close()
 
-    file_TV_A = open("TV_A.txt", "r")
-    file_TV_B = open("TV_B.txt", "r")
-    file_TV_C = open("TV_C.txt", "r")
-    file_TV_D = open("TV_D.txt", "r")
-    file_TV_E = open("TV_E.txt", "r")
-
     ##---------------------- Output Binary to Hex converter-----------------------
-    # file_TV_A_hex = open("A_Hex.txt", "w")
-    # file_TV_B_hex = open("B_Hex.txt", "w")
-    # file_TV_C_hex = open("C_Hex.txt", "w")
-    # file_TV_D_hex = open("D_Hex.txt", "w")
-    # file_TV_E_hex = open("E_Hex.txt", "w")
+    # file_TV_A = open("TV_A.txt", "r")
+    # file_TV_B = open("TV_B.txt", "r")
+    # file_TV_C = open("TV_C.txt", "r")
+    # file_TV_D = open("TV_D.txt", "r")
+    # file_TV_E = open("TV_E.txt", "r")
+
+    # file_TV_A_hex = open("_A_Hex.txt", "w")
+    # file_TV_B_hex = open("_B_Hex.txt", "w")
+    # file_TV_C_hex = open("_C_Hex.txt", "w")
+    # file_TV_D_hex = open("_D_Hex.txt", "w")
+    # file_TV_E_hex = open("_E_Hex.txt", "w")
     #
     # for line in file_TV_A:
     #     chunks, chunk_size = len(line), 4
