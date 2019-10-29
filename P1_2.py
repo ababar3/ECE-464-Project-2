@@ -557,7 +557,7 @@ def bad_sim(circuit,fault):
     return circuit
 
 #main function
-def main():
+def part2():
     script_dir = os.path.dirname(__file__)  # <-- absolute dir the script is in
     while True:
         cktFile = "c432.bench"
@@ -803,7 +803,7 @@ def main():
     percentageFile.close()
 
     percentageFile = open("percentage.txt", "r")
-    csvFile = open("C432-255-b10.csv", "w")
+    csvFile = open("f_cvg.csv", "w")
 
     tvA = []
     tvB = []
@@ -848,9 +848,3 @@ def main():
         csvFile.write(str(i + 1) + "," + tvA[i] + "," + tvB[i] + "," + tvC[i] + "," + tvD[i] + ","+tvE[i]+"," + str(x) + "\n")
         x=x+b
     csvFile.close()
-
-
-
-
-if __name__ == "__main__":
-    main()

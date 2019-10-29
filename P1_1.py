@@ -231,7 +231,7 @@ def TVgenE(seed, fileTV_E, numInputs):
 
 
 
-def main():
+def part1():
 
     print("Full fault list generator\n")
 
@@ -297,6 +297,5 @@ def main():
 
     outputFile.close()
 
-if __name__ == "__main__":
-    main()
+
 
