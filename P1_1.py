@@ -137,32 +137,43 @@ def TVgenA(seed, fileTV_A, numInputs):
         temp = temp[2:]
         a=len(temp)-numInputs
         if len(temp)>numInputs:
-            temp=temp[a:]
+            temp = temp[a:]
         fileTV_A.write(format(int(temp), "0" + str(numInputs)) + "\n")
 
 def TVgenB(seed, fileTV_B, numInputs):
-    for i in range(0, 255):
+    i = 0
+    for counter in range(0, 255):
+        if int(seed)+i > 255:
+            seed = -i
+
         temp = bin(int(seed) + i)
+
         temp = temp[2:]
         temp = format(int(temp), "08")
-        num = temp;
+        num = temp
         while len(temp) < int(numInputs):
             temp = num + temp
 
         fileTV_B.write(temp[len(temp) - numInputs: len(temp)] + "\n")
+        i += 1
 
 
 def TVgenC(seed, fileTV_C, numInputs):
-    for i in range(0, 255):
+    i = 0
+    for counter in range(0, 255):
+        if int(seed)+i > 255:
+            seed = -i
         tv = ""
+        hold = i
         while len(tv) < int(numInputs):
             temp = bin(int(seed) + i)
             temp = temp[2:]
             temp = format(int(temp), "08")
             tv = temp + tv
             i += 1
-
+        i = hold
         fileTV_C.write(tv[len(tv) - numInputs: len(tv)] + "\n")
+        i += 1
 
 
 def LSFR(inp):
@@ -186,9 +197,10 @@ def LSFR(inp):
 def TVgenD(seed, fileTV_D, numInputs):
     temp = bin(int(seed))
     temp = temp[2:]
-
-    for i in range(0, 255):
-
+    i=0
+    for counter in range(0, 255):
+        if int(seed)+i > 255:
+            seed = -i
         if i > 0:
             temp = LSFR(str(temp))
 
@@ -198,12 +210,18 @@ def TVgenD(seed, fileTV_D, numInputs):
             temp = num + temp
 
         fileTV_D.write(temp[len(temp) - numInputs: len(temp)] + "\n")
+        i += 1
 
 
 def TVgenE(seed, fileTV_E, numInputs):
     nextStart = 0
-    for i in range(0, 255):
+    i = 0
+
+    for counter in range(0, 255):
+        if int(seed)+i > 255:
+            seed = -i
         tv = ""
+        hold = i
         if i == 0:
             temp = bin(int(seed))
             temp = temp[2:].zfill(8)
@@ -228,6 +246,8 @@ def TVgenE(seed, fileTV_E, numInputs):
             print(len(tv))
 
         fileTV_E.write(tv[len(tv) - numInputs: len(tv)] + "\n")
+        i = hold
+        i += 1
 
 
 

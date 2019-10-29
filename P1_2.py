@@ -803,7 +803,7 @@ def part2():
     percentageFile.close()
 
     percentageFile = open("percentage.txt", "r")
-    csvFile = open("f_cvg.csv", "w")
+    csvFile = open("B4New.csv", "w")
 
     tvA = []
     tvB = []
