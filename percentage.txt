@@ -1,0 +1,29 @@
+
+PERCENTAGE GENERATION FOR: TV_A.txt
+fault coverage: 323/1064 = 30%
+fault coverage: 370/1064 = 34%
+fault coverage: 372/1064 = 34%
+fault coverage: 374/1064 = 35%
+fault coverage: 374/1064 = 35%
+fault coverage: 374/1064 = 35%
+fault coverage: 374/1064 = 35%
+fault coverage: 374/1064 = 35%
+fault coverage: 374/1064 = 35%
+fault coverage: 375/1064 = 35%
+fault coverage: 375/1064 = 35%
+fault coverage: 375/1064 = 35%
+fault coverage: 375/1064 = 35%
+fault coverage: 375/1064 = 35%
+fault coverage: 375/1064 = 35%
+fault coverage: 375/1064 = 35%
+fault coverage: 400/1064 = 37%
+fault coverage: 404/1064 = 37%
+fault coverage: 411/1064 = 38%
+fault coverage: 419/1064 = 39%
+fault coverage: 419/1064 = 39%
+fault coverage: 419/1064 = 39%
+fault coverage: 419/1064 = 39%
+fault coverage: 421/1064 = 39%
+fault coverage: 421/1064 = 39%
+
+PERCENTAGE GENERATION FOR: TV_B.txt

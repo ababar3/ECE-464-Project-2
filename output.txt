@@ -1,0 +1,8 @@
+#fault sim result
+#input: circuit
+#input: TV_B.txt
+#input: f_list.txt
+
+
+tv1 = 111111111111111111111111111111111111 ->  1110000 
+detected:
