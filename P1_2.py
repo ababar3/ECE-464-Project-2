@@ -1,7 +1,8 @@
 from __future__ import print_function
 import os
 import copy
-
+#****************IMPORTANT FOR RUNNING THE FILE ***********************************
+#******GRADERS PLEASE RENAME THIS FILE TO "P1_2.py"
 # FUNCTION: Neatly prints the Circuit Dictionary:
 def percentageGen(z):
     z=z+1

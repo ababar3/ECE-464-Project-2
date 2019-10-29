@@ -1,6 +1,7 @@
 import P1_1
 import P1_2
-
+#****************IMPORTANT FOR RUNNING THE FILE ***********************************
+#******GRADERS PLEASE RENAME The TWO ATTACHED TO "P1_1.py" and "P1_2.py" EACH OF THE TWO FILES CONTAIN THEIR FILENAME AT THE TOP OF THE SCRIPT.
 def main():
     userInput = ""
     while userInput != "0":

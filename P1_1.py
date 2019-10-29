@@ -1,6 +1,7 @@
 from __future__ import print_function
 import os
-
+#****************IMPORTANT FOR RUNNING THE FILE ***********************************
+#******GRADERS PLEASE RENAME THIS FILE TO "P1_1.py"
 
 def getInput(netName):
 
@@ -218,7 +219,7 @@ def TVgenE(seed, fileTV_E, numInputs):
     i = 0
 
     for counter in range(0, 255):
-        if int(seed)+i > 255:
+        if int(seed) + i > 255:
             seed = -i
         tv = ""
         hold = i
@@ -229,7 +230,7 @@ def TVgenE(seed, fileTV_E, numInputs):
         if i > 0:
             nextInp = nextStart
             i = 0
-        while (len(tv) < int(numInputs)):
+        while len(tv) < int(numInputs):
             if i > 0:
                 temp = LSFR(str(nextInp))
                 temp = format(int(temp), "08")
@@ -240,8 +241,8 @@ def TVgenE(seed, fileTV_E, numInputs):
 
             nextInp = temp
 
-            if len(tv) == 8:
-                nextStart = temp
+            if len(tv) == 0:
+                nextStart = format(LSFR(str(temp)), "08")
             tv = temp + tv
             print(len(tv))
 
